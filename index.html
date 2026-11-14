@@ -1,0 +1,335 @@
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Catálogo gratuito de ferramentas de inteligência artificial e automação para pequenos empreendedores.">
+  <meta name="theme-color" content="#101827">
+  <title>IA na Prática — Ferramentas para empreender</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --ink: #182235;
+      --muted: #667085;
+      --line: #e5e9f0;
+      --primary: #635bdb;
+      --primary-dark: #4c45b8;
+      --soft: #eeedff;
+      --green: #137a55;
+      --green-bg: #e8f7ef;
+      --shadow: 0 12px 35px rgba(24,34,53,.07);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    .topbar {
+      background: #101827;
+      color: #fff;
+      padding: 15px 5vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; letter-spacing: -.4px; }
+    .brand-mark {
+      width: 37px; height: 37px; display: grid; place-items: center;
+      border-radius: 12px; background: linear-gradient(135deg,#8b83ff,#5d55d6);
+      font-size: 19px;
+    }
+    .topbar small { color: #c4cada; }
+    .hero {
+      padding: 70px 5vw 56px;
+      color: white;
+      background:
+        radial-gradient(ellipse at 82% 15%, rgba(137,126,255,.34), transparent 35%),
+        linear-gradient(125deg,#171f36 0%,#28265b 58%,#4540a0 100%);
+    }
+    .hero-inner { max-width: 1120px; margin: auto; }
+    .eyebrow {
+      display: inline-flex; gap: 8px; align-items: center;
+      padding: 6px 11px; border: 1px solid rgba(255,255,255,.2);
+      border-radius: 99px; color: #e0deff; font-size: .82rem; font-weight: 650;
+      background: rgba(255,255,255,.07);
+    }
+    h1 { max-width: 760px; margin: 19px 0 13px; font-size: clamp(2.3rem,5.5vw,4.25rem); line-height: 1.05; letter-spacing: -2.3px; }
+    .hero p { max-width: 690px; color: #d8d9ee; font-size: 1.08rem; margin: 0; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      border: 0; border-radius: 11px; padding: 11px 16px; font-weight: 750;
+      text-decoration: none; cursor: pointer; transition: .18s ease;
+    }
+    .btn-primary { color: #28245e; background: #fff; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px #1114; }
+    .btn-ghost { color: white; border: 1px solid #ffffff55; background: #ffffff0d; }
+    .btn-ghost:hover { background: #ffffff1b; }
+    main { max-width: 1120px; margin: auto; padding: 38px 22px 70px; }
+    .intro-row { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 20px; }
+    h2 { margin: 0; font-size: 1.65rem; letter-spacing: -.7px; }
+    .sub { margin: 5px 0 0; color: var(--muted); }
+    .count { color: var(--muted); font-size: .92rem; white-space: nowrap; }
+    .filters {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 17px; box-shadow: var(--shadow); margin-bottom: 25px;
+    }
+    .filter-grid { display: grid; grid-template-columns: minmax(220px,2fr) minmax(170px,1fr) minmax(170px,1fr); gap: 12px; }
+    .field label { display: block; font-size: .78rem; color: var(--muted); font-weight: 750; margin: 0 0 6px 2px; }
+    input, select {
+      width: 100%; min-height: 45px; padding: 10px 12px; border: 1px solid #d9deea;
+      border-radius: 10px; background: #fff; color: var(--ink); font: inherit; outline: none;
+    }
+    input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px #635bdb20; }
+    .quick-cats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .chip {
+      border: 1px solid var(--line); background: #fff; color: #4c566b; border-radius: 99px;
+      padding: 7px 12px; cursor: pointer; font: inherit; font-size: .84rem; font-weight: 650;
+    }
+    .chip:hover, .chip.active { color: var(--primary-dark); border-color: #c7c3ff; background: var(--soft); }
+    .cards { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 19px; display: flex; flex-direction: column; min-height: 265px;
+      box-shadow: 0 5px 18px rgba(24,34,53,.035); transition: transform .18s, box-shadow .18s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .tool-icon {
+      width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center;
+      background: #f0efff; font-size: 23px; flex: 0 0 auto;
+    }
+    .tool-name { margin: 0; font-size: 1.08rem; line-height: 1.25; }
+    .tool-maker { color: var(--muted); font-size: .78rem; }
+    .card p { margin: 0 0 13px; color: #566176; font-size: .91rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: auto 0 15px; }
+    .tag { padding: 4px 8px; border-radius: 7px; background: #f1f3f8; color: #596276; font-size: .72rem; font-weight: 700; }
+    .tag.access { background: var(--green-bg); color: var(--green); }
+    .card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid #eef0f5; padding-top: 13px; }
+    .category { color: var(--muted); font-size: .76rem; }
+    .visit { color: var(--primary-dark); font-weight: 800; text-decoration: none; font-size: .86rem; }
+    .visit:hover { text-decoration: underline; }
+    .empty {
+      display: none; text-align: center; padding: 42px 20px; color: var(--muted);
+      background: white; border: 1px dashed #cbd2df; border-radius: var(--radius);
+    }
+    .empty strong { display: block; color: var(--ink); font-size: 1.05rem; margin-bottom: 5px; }
+    .how {
+      margin-top: 48px; padding: 25px; border-radius: var(--radius);
+      background: #eeefff; border: 1px solid #dedcff;
+    }
+    .how h2 { font-size: 1.35rem; }
+    .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-top: 18px; }
+    .step { display: flex; gap: 11px; }
+    .step-num { width: 29px; height: 29px; flex: 0 0 auto; border-radius: 9px; display: grid; place-items: center; background: #dcd9ff; color: #40399f; font-weight: 850; }
+    .step b { display: block; margin-bottom: 3px; }
+    .step span { color: #5d6279; font-size: .87rem; }
+    .notice { margin: 22px 0 0; padding: 13px 15px; border-left: 3px solid #8a83ee; background: #f7f7ff; color: #62677b; font-size: .83rem; border-radius: 0 9px 9px 0; }
+    footer { background: #101827; color: #c4cada; padding: 25px 5vw; text-align: center; font-size: .84rem; }
+    footer strong { color: white; }
+    @media (max-width: 850px) {
+      .cards { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .filter-grid { grid-template-columns: 1fr 1fr; }
+      .field.search { grid-column: 1 / -1; }
+      .steps { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .topbar { padding: 13px 18px; }
+      .topbar small { display: none; }
+      .hero { padding: 53px 22px 43px; }
+      h1 { letter-spacing: -1.4px; }
+      main { padding: 30px 15px 52px; }
+      .intro-row { align-items: start; flex-direction: column; gap: 5px; }
+      .filter-grid, .cards { grid-template-columns: 1fr; }
+      .field.search { grid-column: auto; }
+      .card { min-height: 240px; }
+      .how { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">✳</span><span>IA na Prática</span></div>
+    <small>Conhecimento e tecnologia para pequenos negócios</small>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">✦ Catálogo gratuito de ferramentas</span>
+      <h1>Encontre a ferramenta certa para tirar suas ideias do papel.</h1>
+      <p>Explore soluções de inteligência artificial e automação que podem ajudar no atendimento, na divulgação, na criação de conteúdo e na organização do seu negócio.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#catalogo">Explorar ferramentas <span aria-hidden="true">↓</span></a>
+        <a class="btn btn-ghost" href="#como-usar">Como funciona</a>
+      </div>
+    </div>
+  </section>
+
+  <main id="catalogo">
+    <div class="intro-row">
+      <div>
+        <h2>Catálogo de ferramentas</h2>
+        <p class="sub">Pesquise por nome, necessidade ou categoria.</p>
+      </div>
+      <div class="count" id="count" aria-live="polite"></div>
+    </div>
+
+    <section class="filters" aria-label="Filtros do catálogo">
+      <div class="filter-grid">
+        <div class="field search">
+          <label for="search">Buscar ferramenta</label>
+          <input id="search" type="search" placeholder="Ex.: criar imagens, responder clientes..." autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="category">Categoria</label>
+          <select id="category">
+            <option value="all">Todas as categorias</option>
+            <option value="texto">Texto e atendimento</option>
+            <option value="design">Design e imagens</option>
+            <option value="video">Vídeo e áudio</option>
+            <option value="marketing">Marketing e apresentações</option>
+            <option value="produtividade">Pesquisa e produtividade</option>
+            <option value="automacao">Automação de processos</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="access">Tipo de acesso</label>
+          <select id="access">
+            <option value="all">Qualquer modelo de acesso</option>
+            <option value="free">Possui opção gratuita</option>
+            <option value="open">Código aberto / auto-hospedagem</option>
+            <option value="paid">Planos pagos disponíveis</option>
+          </select>
+        </div>
+      </div>
+      <div class="quick-cats" aria-label="Atalhos de categoria">
+        <button class="chip active" data-cat="all" type="button">Todas</button>
+        <button class="chip" data-cat="texto" type="button">✍️ Texto</button>
+        <button class="chip" data-cat="design" type="button">🎨 Design</button>
+        <button class="chip" data-cat="video" type="button">🎬 Vídeo e áudio</button>
+        <button class="chip" data-cat="marketing" type="button">📣 Marketing</button>
+        <button class="chip" data-cat="produtividade" type="button">🧠 Produtividade</button>
+        <button class="chip" data-cat="automacao" type="button">⚙️ Automação</button>
+      </div>
+    </section>
+
+    <section class="cards" id="cards" aria-label="Ferramentas disponíveis"></section>
+    <div class="empty" id="empty">
+      <strong>Nenhuma ferramenta encontrada.</strong>
+      Tente mudar a busca ou remover algum filtro.
+    </div>
+
+    <section class="how" id="como-usar">
+      <h2>Como usar o catálogo</h2>
+      <div class="steps">
+        <div class="step"><span class="step-num">1</span><div><b>Identifique sua necessidade</b><span>Pense na tarefa que deseja facilitar: escrever, divulgar, organizar ou automatizar.</span></div></div>
+        <div class="step"><span class="step-num">2</span><div><b>Explore e compare</b><span>Use a busca e os filtros para encontrar ferramentas relacionadas ao seu objetivo.</span></div></div>
+        <div class="step"><span class="step-num">3</span><div><b>Acesse o serviço oficial</b><span>Abra o site da ferramenta, confira os recursos e verifique as condições de uso.</span></div></div>
+      </div>
+      <p class="notice"><strong>Importante:</strong> este catálogo é independente e apenas organiza links para serviços de terceiros. Recursos, disponibilidade, limites e preços podem mudar. Antes de criar uma conta ou contratar um plano, consulte as informações atualizadas no site oficial. Não compartilhe dados confidenciais de clientes ou da empresa em ferramentas de IA sem avaliar as políticas de privacidade.</p>
+    </section>
+  </main>
+
+  <footer>
+    <strong>IA na Prática</strong> · Catálogo educativo e gratuito de ferramentas digitais.<br>
+    Projeto independente de divulgação e acesso ao conhecimento tecnológico.
+  </footer>
+
+  <script>
+    // Catálogo estático: para adicionar ou editar ferramentas, altere esta lista.
+    // Os filtros e a busca funcionam inteiramente no navegador, sem API ou servidor.
+    const tools = [
+      {name:"ChatGPT", maker:"OpenAI", icon:"✳️", category:"texto", access:["free","paid"], accessLabel:"Opção gratuita e planos pagos", description:"Assistente de IA para rascunhar textos, organizar ideias, resumir informações e apoiar tarefas do dia a dia.", use:"Textos, ideias e atendimento", url:"https://chatgpt.com"},
+      {name:"Gemini", maker:"Google", icon:"♊", category:"texto", access:["free","paid"], accessLabel:"Opção gratuita e planos pagos", description:"Assistente de IA para escrita, brainstorming, pesquisa e apoio a tarefas com recursos do ecossistema Google.", use:"Escrita e produtividade", url:"https://gemini.google.com"},
+      {name:"Claude", maker:"Anthropic", icon:"✴️", category:"texto", access:["free","paid"], accessLabel:"Opção gratuita e planos pagos", description:"Assistente de IA útil para trabalhar com textos longos, revisar documentos, estruturar ideias e analisar conteúdo.", use:"Documentos e análise", url:"https://claude.ai"},
+      {name:"Perplexity", maker:"Perplexity AI", icon:"🔎", category:"produtividade", access:["free","paid"], accessLabel:"Opção gratuita e planos pagos", description:"Ferramenta de pesquisa com respostas acompanhadas de fontes, útil para explorar assuntos e iniciar levantamentos.", use:"Pesquisa e referências", url:"https://www.perplexity.ai"},
+      {name:"NotebookLM", maker:"Google", icon:"📚", category:"produtividade", access:["free"], accessLabel:"Acesso gratuito (sujeito a limites)", description:"Ajuda a consultar e organizar informações a partir de documentos e fontes fornecidos pelo próprio usuário.", use:"Estudo e consulta de documentos", url:"https://notebooklm.google.com"},
+      {name:"Canva", maker:"Canva", icon:"🎨", category:"design", access:["free","paid"], accessLabel:"Opção gratuita e recursos pagos", description:"Editor visual com modelos e recursos de IA para criar posts, apresentações, materiais promocionais e documentos.", use:"Artes e divulgação", url:"https://www.canva.com"},
+      {name:"Adobe Express", maker:"Adobe", icon:"🅰️", category:"design", access:["free","paid"], accessLabel:"Opção gratuita e planos pagos", description:"Ferramenta para criar peças gráficas, conteúdos para redes sociais e materiais visuais com recursos assistidos por IA.", use:"Materiais de marketing", url:"https://www.adobe.com/express/"},
+      {name:"Ideogram", maker:"Ideogram", icon:"🖼️", category:"design", access:["free","paid"], accessLabel:"Opção gratuita limitada e planos pagos", description:"Geração de imagens por descrição textual, útil para explorar conceitos visuais e peças criativas.", use:"Imagens e conceitos visuais", url:"https://ideogram.ai"},
+      {name:"CapCut", maker:"ByteDance", icon:"🎬", category:"video", access:["free","paid"], accessLabel:"Opção gratuita e recursos pagos", description:"Editor de vídeo com ferramentas assistidas por IA para produzir conteúdos curtos e materiais para redes sociais.", use:"Vídeos para redes sociais", url:"https://www.capcut.com"},
+      {name:"Runway", maker:"Runway AI", icon:"🌠", category:"video", access:["free","paid"], accessLabel:"Créditos de teste e planos pagos", description:"Plataforma de criação e edição de vídeo com recursos generativos e ferramentas de produção audiovisual.", use:"Criação e edição de vídeo", url:"https://runwayml.com"},
+      {name:"ElevenLabs", maker:"ElevenLabs", icon:"🎙️", category:"video", access:["free","paid"], accessLabel:"Opção gratuita limitada e planos pagos", description:"Ferramentas de voz sintética e áudio, úteis para narrações, demonstrações e conteúdos acessíveis.", use:"Narração e áudio", url:"https://elevenlabs.io"},
+      {name:"Gamma", maker:"Gamma", icon:"📊", category:"marketing", access:["free","paid"], accessLabel:"Opção gratuita limitada e planos pagos", description:"Ajuda a estruturar apresentações, páginas e documentos visuais a partir de instruções em texto.", use:"Apresentações e propostas", url:"https://gamma.app"},
+      {name:"Copy.ai", maker:"Copy.ai", icon:"✍️", category:"marketing", access:["free","paid"], accessLabel:"Condições gratuitas e planos pagos", description:"Plataforma de apoio à criação de textos comerciais, campanhas e conteúdos de marketing.", use:"Textos comerciais", url:"https://www.copy.ai"},
+      {name:"Make", maker:"Make", icon:"🧩", category:"automacao", access:["free","paid"], accessLabel:"Plano gratuito limitado e planos pagos", description:"Conecta aplicativos e automatiza fluxos de trabalho visualmente, sem exigir que tudo seja programado do zero.", use:"Integração entre serviços", url:"https://www.make.com"},
+      {name:"Zapier", maker:"Zapier", icon:"⚡", category:"automacao", access:["free","paid"], accessLabel:"Plano gratuito limitado e planos pagos", description:"Automatiza tarefas entre diferentes aplicativos, como transferir informações e disparar ações quando algo acontece.", use:"Automação de tarefas", url:"https://zapier.com"},
+      {name:"n8n", maker:"n8n", icon:"🔗", category:"automacao", access:["open","paid"], accessLabel:"Código-fonte disponível e opção hospedada paga", description:"Plataforma de automação de fluxos com integrações e possibilidades avançadas, inclusive com serviços de IA.", use:"Fluxos e integrações", url:"https://n8n.io"}
+    ];
+
+    const categoryNames = {
+      texto:"Texto e atendimento", design:"Design e imagens", video:"Vídeo e áudio",
+      marketing:"Marketing e apresentações", produtividade:"Pesquisa e produtividade",
+      automacao:"Automação de processos"
+    };
+    const cards = document.getElementById("cards");
+    const search = document.getElementById("search");
+    const category = document.getElementById("category");
+    const access = document.getElementById("access");
+    const count = document.getElementById("count");
+    const empty = document.getElementById("empty");
+
+    function render() {
+      const query = search.value.trim().toLocaleLowerCase("pt-BR");
+      const cat = category.value;
+      const acc = access.value;
+      const filtered = tools.filter(tool => {
+        const haystack = [tool.name, tool.maker, tool.description, tool.use, categoryNames[tool.category]].join(" ").toLocaleLowerCase("pt-BR");
+        return (!query || haystack.includes(query)) &&
+          (cat === "all" || tool.category === cat) &&
+          (acc === "all" || tool.access.includes(acc));
+      });
+
+      cards.innerHTML = filtered.map(tool => `
+        <article class="card">
+          <div class="card-head">
+            <div class="tool-icon" aria-hidden="true">${tool.icon}</div>
+            <div><h3 class="tool-name">${tool.name}</h3><div class="tool-maker">${tool.maker}</div></div>
+          </div>
+          <p>${tool.description}</p>
+          <div class="tags">
+            <span class="tag access">${tool.accessLabel}</span>
+            <span class="tag">${tool.use}</span>
+          </div>
+          <div class="card-foot">
+            <span class="category">${categoryNames[tool.category]}</span>
+            <a class="visit" href="${tool.url}" target="_blank" rel="noopener noreferrer">Site oficial ↗</a>
+          </div>
+        </article>
+      `).join("");
+
+      count.textContent = `${filtered.length} ${filtered.length === 1 ? "ferramenta encontrada" : "ferramentas encontradas"}`;
+      empty.style.display = filtered.length ? "none" : "block";
+      cards.style.display = filtered.length ? "grid" : "none";
+    }
+
+    search.addEventListener("input", render);
+    category.addEventListener("change", () => {
+      document.querySelectorAll(".chip").forEach(btn => btn.classList.toggle("active", btn.dataset.cat === category.value));
+      render();
+    });
+    access.addEventListener("change", render);
+    document.querySelectorAll(".chip").forEach(btn => btn.addEventListener("click", () => {
+      category.value = btn.dataset.cat;
+      document.querySelectorAll(".chip").forEach(other => other.classList.toggle("active", other === btn));
+      render();
+    }));
+    render();
+  </script>
+</body>
+</html>
+'''
+
+path = Path("/mnt/data/ia-na-pratica.html")
+path.write_text(html, encoding="utf-8")
+print(f"Arquivo criado: {path} ({path.stat().st_size:,} bytes)")
